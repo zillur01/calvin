@@ -168,6 +168,17 @@ python utils/relabel_with_new_lang_model.py +path=$CALVIN_ROOT/dataset/task_D_D/
 ```
 If you additionally want to sample different language annotations for each sequence (from the same task annotations) in the training split run the same command with the parameter `reannotate=true`.
 
+## Visualize Dataset
+You can visualize the training and validation sets and use the right-left arrow keys to iterate through samples.
+```console
+$ cd $CALVIN_ROOT
+$ python scripts/visualize_dataset.py ./dataset/calvin_debug_dataset/validation/
+```
+By default, it will open both `rgb_static` and `rgb_gripper` data. If you want only one, run 
+```
+$ python scripts/visualize_dataset.py ./dataset/calvin_debug_dataset/validation/ --data rgb_gripper
+
+```
 ## :chart_with_upwards_trend: SOTA Models
 Open-source models that outperform the MCIL baselines from CALVIN:
 
@@ -320,46 +331,6 @@ We automatically handle this in our wrapper in calvin_env and find the correspon
 Yes, although it is not documented right now, all the code to record data with a VR headset is present in
 calvin_env in [https://github.com/mees/calvin_env/blob/main/calvin_env/vrdatacollector.py](https://github.com/mees/calvin_env/blob/main/calvin_env/vrdatacollector.py)
 
-
-## Changelog
-### 24 Feb 2023
-- Wrong `scene_info.npy` in D dataset. Note that we have updated the corresponding checksum. Please replace as follows:
-```
-cd task_D_D
-wget http://calvin.cs.uni-freiburg.de/scene_info_fix/task_D_D_scene_info.zip
-unzip task_D_D_scene_info.zip && rm task_D_D_scene_info.zip
-```
-
-### 16 Sep 2022
-- **MAJOR BUG IN ABC and ABCD dataset:** If you downloaded these datasets before this date you have to do these fixes:
-   - Wrong language annotations in ABC and ABCD dataset. You can download the corrected language embeddings [here](https://github.com/mees/calvin/blob/main/dataset/README.md#language-embeddings).
-   - Bug in `calvin_env` that only affects the generation of language embeddings.
-   - Wrong `scene_info.npy` in ABC and ABCD dataset. Please replace as follows:
-```
-cd task_ABCD_D
-wget http://calvin.cs.uni-freiburg.de/scene_info_fix/task_ABCD_D_scene_info.zip
-unzip task_ABCD_D_scene_info.zip && rm task_ABCD_D_scene_info.zip
-```
-```
-cd task_ABC_D
-wget http://calvin.cs.uni-freiburg.de/scene_info_fix/task_ABC_D_scene_info.zip
-unzip task_ABC_D_scene_info.zip && rm task_ABC_D_scene_info.zip
-```
-- Added additional language embeddings to dataset.
-
-
-### 15 May 2022
-- Added shared memory dataset loader for faster training. Refactored data loading classes.
-
-### 7 Feb 2022
-- Minor changes to the distribution of tasks in the long-horizon multi-step sequences.
-- Changes to the task success criteria of pushing and lifting.
-- Set `use_nullspace: true` for robot in hydra cfg of dataset. If you downloaded one of the datasets prior to this date,
-edit this line in <PATH_TO_DATASET>/training/.hydra/merged_config.yaml and <PATH_TO_DATASET>/validation/.hydra/merged_config.yaml.
-- Renaming `model.decoder` to `model.action_decoder`.
-
-### 10 Jan 2022
-- Breaking change to evaluation, using different intitial states for environment.
 
 ## Citation
 
